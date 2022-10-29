@@ -1,0 +1,56 @@
+module Main where
+
+import System.Process
+
+import Data.Foldable
+import Text.Printf
+
+import qualified Data.ByteString as B
+import qualified Data.ByteString.Builder as B
+import qualified Data.ByteString.Lazy as LB
+
+type Pulse = Float
+type Seconds = Float
+type Samples = Float
+type Hz = Float
+
+outputFilePath :: FilePath
+outputFilePath = "output.bin"
+
+sampleRate :: Samples
+sampleRate = 48000.0
+
+pitchStandard :: Hz
+pitchStandard = 440.0
+
+main = do
+  save
+  runCommand $ printf "ffplay -showmode 1 -f f32le -ar %f %s" sampleRate outputFilePath -- trick
+
+-- multiply
+volume = 0.5 
+
+-- generate sampleRate samples per second
+-- wave :: [Float]
+-- wave = concat [freq 440.0 1.0, freq 540.0 1.0] -- concat together different notes
+
+wave :: [Pulse]
+wave = concat [ freq (pitchStandard + i * 100.0) duration | i <- [0..10]]
+  where duration = 1.0
+
+  
+freq :: Hz -> Seconds -> [Pulse]
+freq hz duration =  map (* volume) $ map sin $ map (*step) [0.0 .. sampleRate * duration] 
+  where step = (hz * 2 * pi) / sampleRate
+
+        -- this is the difference between notes I believe 
+
+
+
+{-
+   for pitch standard (440 hz) we must do 440 cycles of sin(x) which ranges from 0 -> 2*pi
+-}
+        
+save :: IO ()
+save = LB.writeFile outputFilePath $  B.toLazyByteString $ fold $  Prelude.map B.floatLE wave
+
