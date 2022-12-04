@@ -27,7 +27,7 @@ pitchStandard :: Hz
 pitchStandard = 440.0
 
 bpm :: Beats
-bpm = 120.0
+bpm = 97 -- 120.0
 
 -- Length of a beat is based on target beats per minute
 beatDuration :: Seconds
@@ -37,7 +37,8 @@ beatDuration = 60.0 / bpm
 -- step =  (hz * 2 * pi) / sampleRate
 
 main = do
-  save $ (wave <> (rest 1) <> reverse wave) <> (rest 1) <> wave
+  --save $ (wave <> (rest 1) <> reverse wave) <> (rest 1) <> wave
+  save welcomeToTheBlackParade
   runCommand $ printf "ffplay -showmode 1 -f f32le -ar %f %s" sampleRate outputFilePath -- trick
 
 -- multiply
@@ -222,3 +223,17 @@ f n = pitchStandard * (2 ** (1.0/12.0)) ** n
 save :: [Pulse] -> IO ()
 save wave = LB.writeFile outputFilePath $  B.toLazyByteString $ fold $  Prelude.map B.floatLE wave
 
+
+
+bpmWelcomeToTheBlackParade :: Beats
+bpmWelcomeToTheBlackParade = 97 
+
+--- how to overlay notes? must add the notes I believe 
+
+welcomeToTheBlackParade :: [Pulse]
+welcomeToTheBlackParade = concat [ note 0 1
+                                 , note 6 0.5
+                                 , rest 1
+                                 , note 5 0.25
+                                 , note 8 0.25
+                                 ]
