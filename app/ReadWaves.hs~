@@ -1,0 +1,14 @@
+{-# LANGUAGE ScopedTypeVariables #-} 
+
+module ReadWaves where
+
+import Data.Either
+
+import Codec.Wav
+import Data.Audio
+import Data.Int (Int16)
+
+readWaves = do
+  x :: (Either String (Audio Int16)) <- importFile "/home/lazylambda/Documents/TEDxOakland - November 3, 2019/A Mesmerizing Performance on Counting Blessings and Universal Love _ Kev Choice _ TEDxOakland.wav"
+
+  print $ sampleData $ fromRight undefined x

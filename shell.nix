@@ -4,8 +4,11 @@ let
 
   inherit (nixpkgs) pkgs;
 
+  haskLib = pkgs.haskell.lib;
+  
   f = { mkDerivation, aeson, base, bytestring, lib, matplotlib
-      , process
+      , process, cabal-install, HCodecs, wavy, binary, either, filepath, transformers
+      , python3, which 
       }:
       mkDerivation {
         pname = "makeMusic";
@@ -14,8 +17,11 @@ let
         isLibrary = false;
         isExecutable = true;
         executableHaskellDepends = [
-          aeson base bytestring matplotlib process
+          aeson base bytestring matplotlib process HCodecs which
+        #   (haskLib.doJailbreak wavy)
+        #   (pkgs.callHackage "riff" ) #binary either filepath transformers
         ];
+        librarySystemDepends = [ cabal-install python3 ];
         license = "unknown";
         mainProgram = "makeMusic";
       };

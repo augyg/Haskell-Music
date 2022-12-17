@@ -1,0 +1,54 @@
+
+{-# LANGUAGE TemplateHaskell #-} 
+{-# LANGUAGE ScopedTypeVariables #-} 
+
+module ReadWaves where
+
+import Data.Either
+
+import Codec.Wav
+import Data.Audio
+import Data.Int (Int16, Int32, Int64)
+
+import Data.Ix
+import Data.Array.IArray
+
+import Graphics.Matplotlib
+import System.Which
+
+python = $(staticWhich "python3") 
+
+---wave-0.2.0
+--import Codec.Audio.Wave
+
+-- wavy-0.1.0.0
+--import Sound.Wav
+
+path = "/home/lazylambda/Documents/TEDxOakland - November 3, 2019/A Mesmerizing Performance on Counting Blessings and Universal Love _ Kev Choice _ TEDxOakland.wav"
+
+readWaves = do
+  x :: (Either String (Audio Int64)) <- importFile path
+
+  let theData = take 10 . (drop 10000) .  assocs . sampleData $ fromRight undefined x
+  let daData = assocs . sampleData $ fromRight undefined x
+  
+  --print theData
+
+  onscreen $ line1 theData
+
+  
+
+  
+  ---Wavy-0.1.0.0
+
+  -- wavy <- decodeWaveFile path
+
+  -- print $ decodeUtf8 . toStrict . waveData $ wave 
+
+  ---Wave-0.2
+  {- UTTERLY USELESS -}   
+  -- w <- readWaveFile path
+  -- print w
+
+
+  

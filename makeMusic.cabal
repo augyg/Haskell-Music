@@ -25,7 +25,8 @@ executable makeMusic
     main-is:          Main.hs
 
     -- Modules included in this executable, other than Main.
-    -- other-modules:
+    other-modules:
+        ReadWaves
 
     -- LANGUAGE extensions used by modules in this package.
     -- other-extensions:
@@ -34,5 +35,11 @@ executable makeMusic
                     , process
                     , matplotlib
                     , aeson
+                    , HCodecs
+                    , array
+                    , which
+--                    , vector
+--                    , transformers                    
+--                    , wavy
     hs-source-dirs:   app
     default-language: Haskell2010
